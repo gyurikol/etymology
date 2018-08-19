@@ -9,7 +9,19 @@ namespace etymology.Models
     /// </summary>
     public class Morpheme
     {
-        // Enumerations
+        // Enumerations.
+        /// <summary>
+        /// Morpheme type.
+        /// </summary>
+        public enum MorphemeType
+        {
+            Root,
+            Prefix,
+            Suffix
+        }
+        /// <summary>
+        /// Morpheme origin.
+        /// </summary>
         public enum MorphemeOrigin {
             Greek,
             Latin,
@@ -20,6 +32,7 @@ namespace etymology.Models
         private String morpheme;
         private IEnumerable<String> meaning;
         private MorphemeOrigin origin;
+        private MorphemeType morphemeType;
 
         // Accessors and Mutators
         public IEnumerable<String> Meaning {
@@ -30,6 +43,11 @@ namespace etymology.Models
         public MorphemeOrigin Origin {
             get {
                 return origin;
+            }
+        }
+        public MorphemeType Type {
+            get {
+                return morphemeType;
             }
         }
 
