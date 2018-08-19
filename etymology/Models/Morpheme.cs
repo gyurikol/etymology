@@ -56,9 +56,37 @@ namespace etymology.Models
         /// </summary>
         public Morpheme(String Root, IEnumerable<String> Meaning, MorphemeOrigin Origin)
         {
+            if (!AssignType(Root.Trim()))
+            {
+                return;
+            }
+
             morpheme = Root.Trim();
             meaning = Meaning.Select(s => s.Trim());
             origin = Origin;
+        }
+
+        /// <summary>
+        /// Assigns the Morpheme type.
+        /// </summary>
+        /// <returns><c>true</c>, if type was assigned, <c>false</c> otherwise.</returns>
+        private bool AssignType(String Word)
+        {
+            if (Word != String.Empty)
+            {
+                if (Word.First() == '-')
+                {
+                    morphemeType = MorphemeType.Suffix;
+                }
+                else if (Word.Last() == '-')
+                {
+                    morphemeType = MorphemeType.Prefix;
+                }
+                else
+                    morphemeType = MorphemeType.Root;
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
