@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 namespace etymology.Models
 {
     /// <summary>
@@ -16,15 +18,17 @@ namespace etymology.Models
 
         // Members.
         private String morpheme;
-        private String[] meaning;
+        private IEnumerable<String> meaning;
         private MorphemeOrigin origin;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:etymology.Models.Morpheme"/> class.
         /// </summary>
-        public Morpheme(String Root, String Meaning, MorphemeOrigin Origin)
+        public Morpheme(String Root, IEnumerable<String> Meaning, MorphemeOrigin Origin)
         {
-            
+            morpheme = Root.Trim();
+            meaning = Meaning.Select(s => s.Trim());
+            origin = Origin;
         }
     }
 }
