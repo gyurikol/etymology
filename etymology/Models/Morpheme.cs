@@ -21,6 +21,18 @@ namespace etymology.Models
         private IEnumerable<String> meaning;
         private MorphemeOrigin origin;
 
+        // Accessors and Mutators
+        public IEnumerable<String> Meaning {
+            get {
+                return meaning;
+            }
+        }
+        public MorphemeOrigin Origin {
+            get {
+                return origin;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="T:etymology.Models.Morpheme"/> class.
         /// </summary>
@@ -29,6 +41,15 @@ namespace etymology.Models
             morpheme = Root.Trim();
             meaning = Meaning.Select(s => s.Trim());
             origin = Origin;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:etymology.Models.Morpheme"/>.
+        /// </summary>
+        /// <returns>A <see cref="T:System.String"/> that represents the current <see cref="T:etymology.Models.Morpheme"/>.</returns>
+        public override string ToString()
+        {
+            return morpheme;
         }
     }
 }
