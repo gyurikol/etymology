@@ -40,34 +40,43 @@ namespace etymology.Controllers
 
         // GET: api/values
         [HttpGet]
-        public String GetAll()
+        public ActionResult<String> GetAll()
         {
             return String.Join("\n", _context.Morphemes.ToList() );
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}", Name = "GetMorpheme")]
+        public ActionResult<String> Get(int id)
         {
-            return "value";
+            // query all morphemes in db context
+            var query = from m in _context.Morphemes
+                        where m.ID == id
+                        select m;
+
+            foreach(var item in query)
+            {
+                return item.ToString();
+            }
+            return string.Empty;
         }
 
         // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
+        //[HttpPost]
+        //public void Post([FromBody]string value)
+        //{
+        //}
 
         // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody]string value)
+        //{
+        //}
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     }
 }

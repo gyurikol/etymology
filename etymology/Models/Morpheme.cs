@@ -48,8 +48,6 @@ namespace etymology.Models
         // Accessors and Mutators
         [DataMember]
         public int ID { get; set; }
-        [DataMember]
-        [JsonConverter(typeof(StringEnumConverter))]
         public MorphemeType Type
         {
             get
@@ -124,8 +122,7 @@ namespace etymology.Models
         /// <returns>A <see cref="T:System.String"/> that represents the current <see cref="T:etymology.Models.Morpheme"/>.</returns>
         public override string ToString()
         {
-            string json = JsonConvert.SerializeObject(this, Formatting.Indented);
-            return json;
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
 
         /// <summary>
