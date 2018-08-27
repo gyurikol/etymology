@@ -30,13 +30,14 @@ namespace etymology.Models
         }
 
         // Members.
-        private String morpheme;
-        private IEnumerable<String> meaning;
+        private readonly String morpheme;
+        private List<String> meaning;
         private MorphemeOrigin origin;
         private MorphemeType morphemeType;
 
         // Accessors and Mutators
-        public IEnumerable<String> Meaning {
+        public int ID { get; set; }
+        public List<String> Meaning {
             get {
                 return meaning;
             }
@@ -55,7 +56,14 @@ namespace etymology.Models
         /// <summary>
         /// Initializes a new instance of the <see cref="T:etymology.Models.Morpheme"/> class.
         /// </summary>
-        public Morpheme(String Root, IEnumerable<String> Meaning, MorphemeOrigin Origin)
+        public Morpheme()
+        {}
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:etymology.Models.Morpheme"/> class.
+        /// </summary>
+        public Morpheme(String Root, List<String> Meaning, MorphemeOrigin Origin)
         {
             if (!AssignType(Root.Trim()))
             {
@@ -63,7 +71,7 @@ namespace etymology.Models
             }
 
             morpheme = Root.Trim();
-            meaning = Meaning.Select(s => s.Trim());
+            meaning = Meaning;
             origin = Origin;
         }
 

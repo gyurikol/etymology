@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Core
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+// Morphemes
+using Microsoft.EntityFrameworkCore;
+using etymology.Models.dbContext;
 
 namespace etymology
 {
@@ -31,7 +36,8 @@ namespace etymology
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            // Add db context for morpheme
+            services.AddDbContext<MorphemeContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
