@@ -27,6 +27,7 @@ namespace etymology.Controllers
         /// Initializes a new instance of the <see cref="T:etymology.Controllers.MorphemeController"/> class.
         /// </summary>
         public MorphemeController(MorphemeContext context) {
+            context.Database.EnsureCreated();
             _context = context;
         }
 
