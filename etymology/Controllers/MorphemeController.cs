@@ -27,8 +27,13 @@ namespace etymology.Controllers
         /// Initializes a new instance of the <see cref="T:etymology.Controllers.MorphemeController"/> class.
         /// </summary>
         public MorphemeController(MorphemeContext context) {
+            // check if database has items not loaded
+            if (context.Morphemes.Count() == 0)
+            {
+                context.Database.EnsureCreated();
+            }
+
             _context = context;
-            _context.Database.EnsureCreated();
         }
 
         // GET: api/values
