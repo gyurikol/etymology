@@ -18,24 +18,6 @@ namespace etymology
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
-
-            /*using (var db = new Models.dbContext.MorphemeContext())
-            {
-                db.Morphemes.Add(new Morpheme("a", Enumerable.Empty<string>(), Morpheme.MorphemeOrigin.Latin));
-                db.SaveChanges();
-
-                // Display all Blogs from the database
-                var query = from b in db.Morphemes
-                            orderby b.Name
-                            select b;
-
-                Console.WriteLine("All blogs in the database:");
-                foreach (var item in query)
-                {
-                    Console.WriteLine(item.Name);
-                }
-
-            }*/
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
