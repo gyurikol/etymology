@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 // Morpheme
+using Microsoft.EntityFrameworkCore;
 using etymology.Models.dbContext;
 using etymology.Models;
 
@@ -27,38 +28,25 @@ namespace etymology.Controllers
         /// </summary>
         public MorphemeController(MorphemeContext context) {
             _context = context;
-
-            // if empty for testing
-            if (_context.Morphemes.Count() == 0)
-            {
-                _context.Morphemes.Add(new Morpheme("a", new List<string> { "toward" }, Morpheme.MorphemeOrigin.Latin));
-                _context.Morphemes.Add(new Morpheme("-able", new List<string> { "Adjective: worth, ability" }, Morpheme.MorphemeOrigin.Greek));
-                _context.Morphemes.Add(new Morpheme("-fy", new List<string> { "make, form into" }, Morpheme.MorphemeOrigin.Latin));
-                _context.SaveChanges();
-            }
         }
 
         // GET: api/values
         [HttpGet]
         public ActionResult<String> GetAll()
         {
-            return String.Join("\n", _context.Morphemes.ToList() );
+            return String.Join("\n", _context.Morphemes.ToList());
         }
 
         // GET api/values/5
         [HttpGet("{id}", Name = "GetMorpheme")]
         public ActionResult<String> Get(int id)
         {
-            // query all morphemes in db context
-            var query = from m in _context.Morphemes
-                        where m.ID == id
-                        select m;
-
-            foreach(var item in query)
+            var item = _context.Morphemes.Find(id);
+            if (item == null)
             {
-                return item.ToString();
+                return NotFound();
             }
-            return string.Empty;
+            return item.ToString();
         }
 
         // POST api/values

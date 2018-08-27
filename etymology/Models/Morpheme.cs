@@ -94,6 +94,26 @@ namespace etymology.Models
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="T:etymology.Models.Morpheme"/> class.
+        /// </summary>
+        /// <param name="Root">Root word.</param>
+        /// <param name="Meaning">Meaning of root.</param>
+        /// <param name="Origin">Origin of root.</param>
+        /// <param name="id">Identifier of specific Morpheme.</param>
+        public Morpheme(String Root, List<String> Meaning, MorphemeOrigin Origin, int id)
+        {
+            if (!AssignType(Root.Trim()))
+            {
+                return;
+            }
+
+            ID = id;
+            morpheme = Root.Trim();
+            meaning = Meaning.Select(s => s.Trim()).ToList();
+            origin = Origin;
+        }
+
+        /// <summary>
         /// Assigns the Morpheme type.
         /// </summary>
         /// <returns><c>true</c>, if type was assigned, <c>false</c> otherwise.</returns>
@@ -126,7 +146,7 @@ namespace etymology.Models
         }
 
         /// <summary>
-        /// Allows implicit conversion and representation of Morhpeme as String.
+        /// Allows implicit conversion, casting and representation of Morhpeme as String.
         /// </summary>
         /// <returns>Morhpheme Object String</returns>
         /// <param name="m">Morpheme</param>

@@ -40,6 +40,7 @@ namespace etymology
             services.AddDbContext<MorphemeContext>(opt => opt.UseInMemoryDatabase("Morphemes"));
             //var connection = @"Server=(localdb)\mssqllocaldb;Database=EFGetStarted.AspNetCore.NewDb;Trusted_Connection=True;ConnectRetryCount=0";
             //services.AddDbContext<MorphemeContext>(options => options.UseSqlServer(connection));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
