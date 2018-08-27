@@ -31,7 +31,9 @@ namespace etymology.Controllers
             // if empty for testing
             if (_context.Morphemes.Count() == 0)
             {
-                _context.Morphemes.Add(new Morpheme("a", new List<string>(), Morpheme.MorphemeOrigin.Latin));
+                _context.Morphemes.Add(new Morpheme("a", new List<string> { "toward" }, Morpheme.MorphemeOrigin.Latin));
+                _context.Morphemes.Add(new Morpheme("-able", new List<string> { "Adjective: worth, ability" }, Morpheme.MorphemeOrigin.Greek));
+                _context.Morphemes.Add(new Morpheme("-fy", new List<string> { "make, form into" }, Morpheme.MorphemeOrigin.Latin));
                 _context.SaveChanges();
             }
         }
@@ -40,7 +42,7 @@ namespace etymology.Controllers
         [HttpGet]
         public String GetAll()
         {
-            return _context.Morphemes.First().ToJson();
+            return String.Join("\n", _context.Morphemes.ToList() );
         }
 
         // GET api/values/5

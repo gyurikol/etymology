@@ -37,7 +37,9 @@ namespace etymology
             });
 
             // Add db context for morpheme
-            services.AddDbContext<MorphemeContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+            services.AddDbContext<MorphemeContext>(opt => opt.UseInMemoryDatabase("Morphemes"));
+            //var connection = @"Server=(localdb)\mssqllocaldb;Database=EFGetStarted.AspNetCore.NewDb;Trusted_Connection=True;ConnectRetryCount=0";
+            //services.AddDbContext<MorphemeContext>(options => options.UseSqlServer(connection));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

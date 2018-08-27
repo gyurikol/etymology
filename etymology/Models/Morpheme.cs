@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace etymology.Models
 {
@@ -38,13 +39,24 @@ namespace etymology.Models
         [DataMember]
         private List<String> meaning;
         [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
         private MorphemeOrigin origin;
         [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
         private MorphemeType morphemeType;
 
         // Accessors and Mutators
         [DataMember]
         public int ID { get; set; }
+        [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MorphemeType Type
+        {
+            get
+            {
+                return morphemeType;
+            }
+        }
         public String Root {
             get {
                 return morpheme;
@@ -58,11 +70,6 @@ namespace etymology.Models
         public MorphemeOrigin Origin {
             get {
                 return origin;
-            }
-        }
-        public MorphemeType Type {
-            get {
-                return morphemeType;
             }
         }
 
@@ -117,24 +124,18 @@ namespace etymology.Models
         /// <returns>A <see cref="T:System.String"/> that represents the current <see cref="T:etymology.Models.Morpheme"/>.</returns>
         public override string ToString()
         {
-            return morpheme;
+            string json = JsonConvert.SerializeObject(this, Formatting.Indented);
+            return json;
         }
 
         /// <summary>
-        /// Returns the onject instance serialized in json.
+        /// Allows implicit conversion and representation of Morhpeme as String.
         /// </summary>
-        /// <returns>The json of the Morpheme instance</returns>
-        public string ToJson()
+        /// <returns>Morhpheme Object String</returns>
+        /// <param name="m">Morpheme</param>
+        public static implicit operator string(Morpheme m)
         {
-            System.IO.MemoryStream stream1 = new System.IO.MemoryStream();
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(this.GetType());
-
-            ser.WriteObject(stream1, this);
-
-            byte[] json = stream1.ToArray();
-            stream1.Close();
-
-            return System.Text.Encoding.UTF8.GetString(json, 0, json.Length);
+            return m.ToString();
         }
     }
 }
