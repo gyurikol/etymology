@@ -15,11 +15,38 @@ namespace etymology.Models.dbContext
         // add data seeding
         protected override void OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Morpheme>().HasData(new Morpheme("a", new List<string> { "toward" }, Morpheme.MorphemeOrigin.Latin, 1));
-            modelBuilder.Entity<Morpheme>().HasData(new Morpheme("-able", new List<string> { "Adjective: worth, ability" }, Morpheme.MorphemeOrigin.Greek, 2));
-            modelBuilder.Entity<Morpheme>().HasData(new Morpheme("-fy", new List<string> { "make, form into" }, Morpheme.MorphemeOrigin.Latin, 3));
-            modelBuilder.Entity<Morpheme>().HasData(new Morpheme("test", new List<string> { "test" }, Morpheme.MorphemeOrigin.English, 4));
-
+            modelBuilder.Entity<Morpheme>().HasData(new Morpheme
+            {
+                ID = 1,
+                Root = "a",
+                dbMeaning = "toward",
+                Origin = Morpheme.MorphemeOrigin.Latin,
+                RootType = Morpheme.MorphemeType.Root
+            });
+            modelBuilder.Entity<Morpheme>().HasData(new Morpheme
+            {
+                ID = 2,
+                Root = "-able",
+                dbMeaning = "Adjective: worth, Adjective: ability",
+                Origin = Morpheme.MorphemeOrigin.Greek,
+                RootType = Morpheme.MorphemeType.Suffix
+            });
+            modelBuilder.Entity<Morpheme>().HasData(new Morpheme
+            {
+                ID = 3,
+                Root = "-fy",
+                dbMeaning = "make, form into",
+                Origin = Morpheme.MorphemeOrigin.Latin,
+                RootType = Morpheme.MorphemeType.Suffix
+            });
+            modelBuilder.Entity<Morpheme>().HasData(new Morpheme
+            {
+                ID = 4,
+                Root = "test",
+                dbMeaning = "test",
+                Origin = Morpheme.MorphemeOrigin.English,
+                RootType = Morpheme.MorphemeType.Root
+            });
         }
     }
 }

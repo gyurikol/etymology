@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace etymology.Models
 {
@@ -34,84 +35,35 @@ namespace etymology.Models
         }
 
         // Members.
-        [DataMember]
-        private readonly String morpheme;
-        [DataMember]
-        private List<String> meaning;
-        [DataMember]
-        [JsonConverter(typeof(StringEnumConverter))]
-        private MorphemeOrigin origin;
-        [DataMember]
-        [JsonConverter(typeof(StringEnumConverter))]
-        private MorphemeType morphemeType;
-
         // Accessors and Mutators
         [DataMember]
-        public int ID { get; set; }
-        public MorphemeType Type
+        public int ID
+        { get; set; }
+
+        [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MorphemeType RootType
+        { get; set; }
+
+        [DataMember]
+        public String Root
+        { get; set; }
+
+        [NotMapped]
+        public List<String> Meaning
+        { get; set; }
+
+        [DataMember]
+        public string dbMeaning
         {
-            get
-            {
-                return morphemeType;
-            }
-        }
-        public String Root {
-            get {
-                return morpheme;
-            }
-        }
-        public List<String> Meaning {
-            get {
-                return meaning;
-            }
-        }
-        public MorphemeOrigin Origin {
-            get {
-                return origin;
-            }
+            get { return String.Join(',', Meaning); }
+            set { Meaning = value.Split(',').ToList(); }
         }
 
-        /// <summary>
-        /// Default Constructor to initialize a new instance of the <see cref="T:etymology.Models.Morpheme"/> class.
-        /// </summary>
-        public Morpheme()
-        {}
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:etymology.Models.Morpheme"/> class.
-        /// </summary>
-        public Morpheme(String Root, List<String> Meaning, MorphemeOrigin Origin)
-        {
-            if (!AssignType(Root.Trim()))
-            {
-                return;
-            }
-
-            morpheme = Root.Trim();
-            meaning = Meaning.Select(s => s.Trim()).ToList();
-            origin = Origin;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:etymology.Models.Morpheme"/> class.
-        /// </summary>
-        /// <param name="Root">Root word.</param>
-        /// <param name="Meaning">Meaning of root.</param>
-        /// <param name="Origin">Origin of root.</param>
-        /// <param name="id">Identifier of specific Morpheme.</param>
-        public Morpheme(String Root, List<String> Meaning, MorphemeOrigin Origin, int id)
-        {
-            if (!AssignType(Root.Trim()))
-            {
-                return;
-            }
-
-            ID = id;
-            morpheme = Root.Trim();
-            meaning = Meaning.Select(s => s.Trim()).ToList();
-            origin = Origin;
-        }
+        [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MorphemeOrigin Origin
+        { get; set; }
 
         /// <summary>
         /// Assigns the Morpheme type.
@@ -123,14 +75,14 @@ namespace etymology.Models
             {
                 if (Word.First() == '-')
                 {
-                    morphemeType = MorphemeType.Suffix;
+                    RootType = MorphemeType.Suffix;
                 }
                 else if (Word.Last() == '-')
                 {
-                    morphemeType = MorphemeType.Prefix;
+                    RootType = MorphemeType.Prefix;
                 }
                 else
-                    morphemeType = MorphemeType.Root;
+                    RootType = MorphemeType.Root;
                 return true;
             }
             return false;
