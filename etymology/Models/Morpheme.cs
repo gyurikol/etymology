@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 
 namespace etymology.Models
 {
@@ -8,6 +10,7 @@ namespace etymology.Models
     /// Morpheme represents a class and structural representation of a root word.
     ///     "a meaningful morphological unit of a language that cannot be further divided (e.g. in, come, -ing, forming incoming )"
     /// </summary>
+    [DataContract]
     public class Morpheme
     {
         // Enumerations.
@@ -30,13 +33,23 @@ namespace etymology.Models
         }
 
         // Members.
+        [DataMember]
         private readonly String morpheme;
+        [DataMember]
         private List<String> meaning;
+        [DataMember]
         private MorphemeOrigin origin;
+        [DataMember]
         private MorphemeType morphemeType;
 
         // Accessors and Mutators
+        [DataMember]
         public int ID { get; set; }
+        public String Root {
+            get {
+                return morpheme;
+            }
+        }
         public List<String> Meaning {
             get {
                 return meaning;
@@ -54,7 +67,7 @@ namespace etymology.Models
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:etymology.Models.Morpheme"/> class.
+        /// Default Constructor to initialize a new instance of the <see cref="T:etymology.Models.Morpheme"/> class.
         /// </summary>
         public Morpheme()
         {}
@@ -71,7 +84,7 @@ namespace etymology.Models
             }
 
             morpheme = Root.Trim();
-            meaning = Meaning;
+            meaning = Meaning.Select(s => s.Trim()).ToList();
             origin = Origin;
         }
 
@@ -105,6 +118,23 @@ namespace etymology.Models
         public override string ToString()
         {
             return morpheme;
+        }
+
+        /// <summary>
+        /// Returns the onject instance serialized in json.
+        /// </summary>
+        /// <returns>The json of the Morpheme instance</returns>
+        public string ToJson()
+        {
+            System.IO.MemoryStream stream1 = new System.IO.MemoryStream();
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(this.GetType());
+
+            ser.WriteObject(stream1, this);
+
+            byte[] json = stream1.ToArray();
+            stream1.Close();
+
+            return System.Text.Encoding.UTF8.GetString(json, 0, json.Length);
         }
     }
 }

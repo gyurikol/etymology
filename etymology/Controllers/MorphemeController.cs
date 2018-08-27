@@ -40,7 +40,7 @@ namespace etymology.Controllers
         [HttpGet]
         public String GetAll()
         {
-            return _context.Morphemes.First().ToString();
+            return _context.Morphemes.First().ToJson();
         }
 
         // GET api/values/5
