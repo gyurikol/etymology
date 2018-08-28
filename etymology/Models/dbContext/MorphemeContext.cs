@@ -17,14 +17,17 @@ namespace etymology.Models.dbContext
         {
             int count = 1;
             foreach( (String,String,String) t in GetTestData()){
-                modelBuilder.Entity<Morpheme>().HasData(new Morpheme
+                foreach (string root in t.Item1.Split(','))
                 {
-                    ID = count,
-                    Root = t.Item1,
-                    Meaning = t.Item2,
-                    Origin = Morpheme.MorphemeOrigin.English,
-                });
-                count++;
+                    modelBuilder.Entity<Morpheme>().HasData(new Morpheme
+                    {
+                        ID = count,
+                        Root = root,
+                        Meaning = t.Item2,
+                        Origin = Morpheme.MorphemeOrigin.English,
+                    });
+                    count++;
+                }
             }
         }
         

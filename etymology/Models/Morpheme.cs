@@ -35,7 +35,7 @@ namespace etymology.Models
         }
 
         // Members.
-        private List<String> _root;
+        private String _root;
         private MorphemeType _type;
 
         // Accessors and Mutators
@@ -56,11 +56,11 @@ namespace etymology.Models
         public String Root
         {
             get {
-                return String.Join(',', _root);
+                return _root;
             }
             set {
-                _root = value.Split(',').Select(s => s.Trim()).ToList();
-                AssignType(_root.First());
+                AssignType(value);
+                _root = value;
             }
         }
 

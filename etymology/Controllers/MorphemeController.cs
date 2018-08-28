@@ -36,14 +36,14 @@ namespace etymology.Controllers
             _context = context;
         }
 
-        // GET: api/values
+        // GET: api/morphemes
         [HttpGet]
         public ActionResult<String> GetAll()
         {
             return String.Join("\n", _context.Morphemes.ToList());
         }
 
-        // GET api/values/5
+        // GET api/morphemes/5
         [HttpGet("{id}", Name = "GetMorpheme")]
         public ActionResult<String> Get(int id)
         {
@@ -53,6 +53,21 @@ namespace etymology.Controllers
                 return NotFound();
             }
             return item.ToString();
+        }
+
+        // GET api/morphemes/find/{word}
+        [Route("check/{word}")]
+        public ActionResult<String> Get(String word)
+        {
+            String loword = word.ToLower();
+
+            List<String> allMorphemes = new List<string>();
+            foreach(Morpheme m in _context.Morphemes)
+            {
+                allMorphemes.AddRange(m.Root.Split(',').ToList());
+            }
+
+            return String.Join(',', allMorphemes);
         }
 
         // POST api/values
