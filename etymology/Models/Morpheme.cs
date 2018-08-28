@@ -35,6 +35,9 @@ namespace etymology.Models
         }
 
         // Members.
+        private List<String> _root;
+        private MorphemeType _type;
+
         // Accessors and Mutators
         [DataMember]
         public int ID
@@ -43,25 +46,37 @@ namespace etymology.Models
         [DataMember]
         [JsonConverter(typeof(StringEnumConverter))]
         public MorphemeType RootType
-        { get; set; }
-
-        [DataMember]
-        public String Root
-        { get; set; }
-
-        [NotMapped]
-        public List<String> Meaning
-        { get; set; }
-
-        [DataMember]
-        public string dbMeaning
         {
-            get { return String.Join(',', Meaning); }
-            set { Meaning = value.Split(',').ToList(); }
+            get {
+                return _type;
+            }
         }
 
         [DataMember]
-        [JsonConverter(typeof(StringEnumConverter))]
+        public String Root
+        {
+            get {
+                return String.Join(',', _root);
+            }
+            set {
+                _root = value.Split(',').Select(s => s.Trim()).ToList();
+                AssignType(_root.First());
+            }
+        }
+
+        [NotMapped]
+        public List<String> hiddenMeaning
+        { get; set; }
+
+        [DataMember]
+        public String Meaning
+        {
+            get { return String.Join(',', hiddenMeaning); }
+            set { hiddenMeaning = value.Split(',').Select(s => s.Trim()).ToList(); }
+        }
+
+        //[DataMember]
+        //[JsonConverter(typeof(StringEnumConverter))]
         public MorphemeOrigin Origin
         { get; set; }
 
@@ -75,14 +90,14 @@ namespace etymology.Models
             {
                 if (Word.First() == '-')
                 {
-                    RootType = MorphemeType.Suffix;
+                    _type = MorphemeType.Suffix;
                 }
                 else if (Word.Last() == '-')
                 {
-                    RootType = MorphemeType.Prefix;
+                    _type = MorphemeType.Prefix;
                 }
                 else
-                    RootType = MorphemeType.Root;
+                    _type = MorphemeType.Root;
                 return true;
             }
             return false;
