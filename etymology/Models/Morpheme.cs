@@ -75,6 +75,10 @@ namespace etymology.Models
             set { hiddenMeaning = value.Split(',').Select(s => s.Trim()).ToList(); }
         }
 
+        [DataMember]
+        public List<String> Examples
+        { get; set; }
+
         //[DataMember]
         //[JsonConverter(typeof(StringEnumConverter))]
         public MorphemeOrigin Origin
