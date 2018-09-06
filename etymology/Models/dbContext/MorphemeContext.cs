@@ -24,7 +24,7 @@ namespace etymology.Models.dbContext
                         ID = count,
                         Root = root,
                         Meaning = t.Item2,
-                        Origin = Morpheme.MorphemeOrigin.English,
+                        Examples = t.Item3
                     });
                     count++;
                 }

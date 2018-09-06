@@ -28,14 +28,18 @@ namespace etymology.Models
         /// <summary>
         /// Morpheme origin.
         /// </summary>
-        public enum MorphemeOrigin {
+        public enum MorphemeOrigin
+        {
             Greek,
             Latin,
             English
         }
 
         // Members.
+        [NotMapped]
         private String _root;
+
+        [NotMapped]
         private MorphemeType _type;
 
         // Accessors and Mutators
@@ -47,7 +51,8 @@ namespace etymology.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public MorphemeType RootType
         {
-            get {
+            get
+            {
                 return _type;
             }
         }
@@ -55,29 +60,50 @@ namespace etymology.Models
         [DataMember]
         public String Root
         {
-            get {
+            get
+            {
                 return _root;
             }
-            set {
-                AssignType(value);
-                _root = value;
+            set
+            {
+                AssignType(value.Trim());
             }
         }
 
         [NotMapped]
-        public List<String> hiddenMeaning
+        private List<String> _meaning
+        { get; set; }
+
+        [NotMapped]
+        private List<String> _examples
         { get; set; }
 
         [DataMember]
         public String Meaning
         {
-            get { return String.Join(',', hiddenMeaning); }
-            set { hiddenMeaning = value.Split(',').Select(s => s.Trim()).ToList(); }
+            get
+            {
+                return String.Join(',', _meaning);
+            }
+            set
+            {
+                _meaning = value.Split(',').Select(s => s.Trim()).ToList();
+            }
         }
 
         [DataMember]
-        public List<String> Examples
-        { get; set; }
+        public String Examples
+        {
+            get
+            {
+                return String.Join(',', _examples);
+            }
+            set
+            {
+                //_examples = FilterExamples(value.Split(',').Select(s => s.Trim()).ToList());
+                _examples = value.Split(',').Select(s => s.Trim()).ToList();
+            }
+        }
 
         //[DataMember]
         //[JsonConverter(typeof(StringEnumConverter))]
@@ -95,16 +121,59 @@ namespace etymology.Models
                 if (Word.First() == '-')
                 {
                     _type = MorphemeType.Suffix;
+                    _root = Word.Substring(1);
                 }
                 else if (Word.Last() == '-')
                 {
                     _type = MorphemeType.Prefix;
+                    _root = Word.Substring(0, Word.Length - 1);
                 }
                 else
+                {
                     _type = MorphemeType.Root;
+                    _root = Word;
+                }
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Filters the examples to remove redundancies and maintain used examples.
+        /// </summary>
+        /// <returns>List of examples.</returns>
+        /// <param name="ExampleList">Example list.</param>
+        public List<String> FilterExamples(List<String> ExampleList)
+        {
+            var tempList = new List<String>();
+
+            foreach (String example in ExampleList)
+            {
+                if (!String.IsNullOrEmpty(example))
+                {
+                    if (_type == MorphemeType.Prefix)
+                    {
+                        if (example.Substring(0, example.Length - 1).Contains(_root))
+                            tempList.Add(example);
+                    }
+                    else if (_type == MorphemeType.Suffix)
+                    {
+                        if (example.Substring(1).Contains(_root))
+                            tempList.Add(example);
+                    }
+                    else
+                    {
+                        if (string.IsNullOrEmpty(_root))
+                        {
+                            Console.WriteLine("error");
+                        }
+                        if (example.Contains(_root))
+                            tempList.Add(example);
+                    }
+                }
+            }
+
+            return tempList;
         }
 
         /// <summary>
