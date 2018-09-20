@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace etymology.Models.dbContext
@@ -23,6 +24,7 @@ namespace etymology.Models.dbContext
                     {
                         ID = count,
                         Root = root,
+                        RootType = AssignType(root),
                         Meaning = t.Item2,
                         Examples = t.Item3
                     });
@@ -30,7 +32,28 @@ namespace etymology.Models.dbContext
                 }
             }
         }
-        
+
+        // Functions
+        /// <summary>
+        /// Assigns the Morpheme type.
+        /// </summary>
+        /// <returns><c>true</c>, if type was assigned, <c>false</c> otherwise.</returns>
+        private Morpheme.MorphemeType AssignType(String Word)
+        {
+            Morpheme.MorphemeType tempType = Morpheme.MorphemeType.Root;
+
+            if (Word.First() == '-')
+            {
+                tempType = Morpheme.MorphemeType.Suffix;
+            }
+            else if (Word.Last() == '-')
+            {
+                tempType = Morpheme.MorphemeType.Prefix;
+            }
+
+            return tempType;
+        }
+
         /// <summary>
         /// Compiles and gets the test data.
         /// </summary>

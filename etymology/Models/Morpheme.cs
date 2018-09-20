@@ -55,6 +55,10 @@ namespace etymology.Models
             {
                 return _type;
             }
+            set
+            {
+                _type = value;
+            }
         }
 
         [DataMember]
@@ -66,7 +70,7 @@ namespace etymology.Models
             }
             set
             {
-                AssignType(value.Trim());
+                _root = value.Trim();
             }
         }
 
@@ -110,34 +114,9 @@ namespace etymology.Models
         public MorphemeOrigin Origin
         { get; set; }
 
-        /// <summary>
-        /// Assigns the Morpheme type.
-        /// </summary>
-        /// <returns><c>true</c>, if type was assigned, <c>false</c> otherwise.</returns>
-        private bool AssignType(String Word)
-        {
-            if (Word != String.Empty)
-            {
-                if (Word.First() == '-')
-                {
-                    _type = MorphemeType.Suffix;
-                    _root = Word.Substring(1);
-                }
-                else if (Word.Last() == '-')
-                {
-                    _type = MorphemeType.Prefix;
-                    _root = Word.Substring(0, Word.Length - 1);
-                }
-                else
-                {
-                    _type = MorphemeType.Root;
-                    _root = Word;
-                }
-                return true;
-            }
-            return false;
-        }
 
+
+        // Functions.
         /// <summary>
         /// Filters the examples to remove redundancies and maintain used examples.
         /// </summary>
