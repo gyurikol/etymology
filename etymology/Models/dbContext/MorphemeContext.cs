@@ -20,14 +20,21 @@ namespace etymology.Models.dbContext
             foreach( (String,String,String) t in GetTestData()){
                 foreach (string root in t.Item1.Split(','))
                 {
+                    (Morpheme.MorphemeType, String) typeAssessment = AssignType(root);
+
                     modelBuilder.Entity<Morpheme>().HasData(new Morpheme
                     {
                         ID = count,
-                        Root = root,
-                        RootType = AssignType(root),
+                        Root = typeAssessment.Item2,
+                        RootType = typeAssessment.Item1,
                         Meaning = t.Item2,
-                        Examples = t.Item3
+                        Examples = String.Join(',', FilterExamples(
+                            t.Item3.Split(',').Select(s => s.Trim()).ToList(),
+                            typeAssessment.Item2,
+                            typeAssessment.Item1
+                        ))
                     });
+
                     count++;
                 }
             }
@@ -37,21 +44,62 @@ namespace etymology.Models.dbContext
         /// <summary>
         /// Assigns the Morpheme type.
         /// </summary>
-        /// <returns><c>true</c>, if type was assigned, <c>false</c> otherwise.</returns>
-        private Morpheme.MorphemeType AssignType(String Word)
+        /// <returns>Tuple like structure with Morhpeme type and Morpheme without hyphen</returns>
+        private (Morpheme.MorphemeType, String) AssignType(String Word)
         {
             Morpheme.MorphemeType tempType = Morpheme.MorphemeType.Root;
+            String cleanedWord = Word;
 
             if (Word.First() == '-')
             {
                 tempType = Morpheme.MorphemeType.Suffix;
+                cleanedWord = cleanedWord.Substring(1);
             }
             else if (Word.Last() == '-')
             {
                 tempType = Morpheme.MorphemeType.Prefix;
+                cleanedWord = cleanedWord.Substring(0, cleanedWord.Length - 1);
             }
 
-            return tempType;
+            return (tempType, cleanedWord);
+        }
+
+        /// <summary>
+        /// Filters the examples to remove redundancies and maintain used examples.
+        /// </summary>
+        /// <returns>List of examples.</returns>
+        /// <param name="ExampleList">Example list.</param>
+        public List<String> FilterExamples(List<String> ExampleList, String Word, Morpheme.MorphemeType Mtype)
+        {
+            var tempList = new List<String>();
+
+            foreach (String example in ExampleList)
+            {
+                if (!String.IsNullOrEmpty(example))
+                {
+                    if (Mtype == Morpheme.MorphemeType.Prefix)
+                    {
+                        if (example.Substring(0, example.Length - 1).Contains(Word))
+                            tempList.Add(example);
+                    }
+                    else if (Mtype == Morpheme.MorphemeType.Suffix)
+                    {
+                        if (example.Substring(1).Contains(Word))
+                            tempList.Add(example);
+                    }
+                    else
+                    {
+                        if (string.IsNullOrEmpty(Word))
+                        {
+                            Console.WriteLine("error");
+                        }
+                        if (example.Contains(Word))
+                            tempList.Add(example);
+                    }
+                }
+            }
+
+            return tempList;
         }
 
         /// <summary>

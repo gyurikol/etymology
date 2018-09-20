@@ -104,7 +104,6 @@ namespace etymology.Models
             }
             set
             {
-                //_examples = FilterExamples(value.Split(',').Select(s => s.Trim()).ToList());
                 _examples = value.Split(',').Select(s => s.Trim()).ToList();
             }
         }
@@ -117,44 +116,6 @@ namespace etymology.Models
 
 
         // Functions.
-        /// <summary>
-        /// Filters the examples to remove redundancies and maintain used examples.
-        /// </summary>
-        /// <returns>List of examples.</returns>
-        /// <param name="ExampleList">Example list.</param>
-        public List<String> FilterExamples(List<String> ExampleList)
-        {
-            var tempList = new List<String>();
-
-            foreach (String example in ExampleList)
-            {
-                if (!String.IsNullOrEmpty(example))
-                {
-                    if (_type == MorphemeType.Prefix)
-                    {
-                        if (example.Substring(0, example.Length - 1).Contains(_root))
-                            tempList.Add(example);
-                    }
-                    else if (_type == MorphemeType.Suffix)
-                    {
-                        if (example.Substring(1).Contains(_root))
-                            tempList.Add(example);
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(_root))
-                        {
-                            Console.WriteLine("error");
-                        }
-                        if (example.Contains(_root))
-                            tempList.Add(example);
-                    }
-                }
-            }
-
-            return tempList;
-        }
-
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:etymology.Models.Morpheme"/>.
         /// </summary>
